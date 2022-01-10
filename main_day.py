@@ -1,29 +1,19 @@
-import lib.function
+import lib.function as fun
 import json
 import time
+import lib.defines as df
+import os
 # json文件
-jf='data/common.json'
-
 
 while True:
     time.sleep(1.5)
-    print('=='*20)
-    try:
-        with open(jf, 'r') as f:data = json.load(f)
-        print('data old:',data)
-    except json.JSONDecodeError:
-        data={}
-    try:
-        day = data['day']
-        print('day:',day)
-    except KeyError:
-        print('data中没有day   data：',data)
-        data.update({'day':0})
-        day=0
-
-    day=day+1
-    data.update({'day':day})
-    print('data new:',data)
-    with  open(jf, 'w') as f:json.dump(data, f)
+    os.system("cls")
+    day = fun.get_day() + 1
+    with open(df.day_json_file, "w") as f:
+        json.dump({"day": day}, f)
+    print("day:", day)
+    print("==" * 20)
+    ###############################################
+    goods = fun.get_user_data()
+    print(goods)
     print()
-

@@ -5,7 +5,7 @@ import _thread
 from threading import Timer
 
 
-import var
+import gui
 import MyClass
 
 class MyLabel(wx.StaticText):
@@ -68,8 +68,8 @@ class Mywin(wx.Frame):
         self.Show()
 
     def 创建单位列表(self):
-        for i in var.产品列表:
-            var.单位列表.append(MyClass.factory(self.panel,i))
+        for i in gui.产品列表:
+            gui.单位列表.append(MyClass.factory(self.panel,i))
 
     def 添加菜单栏(self):
         fileMenu = wx.Menu('菜单标题') #顶级菜单
@@ -89,45 +89,45 @@ class Mywin(wx.Frame):
         self.Bind(wx.EVT_MENU, self.菜单栏事件) 
         self.t = Timer(1.0, self.display)
     def 添加表头(self):
-        for i in var.信息表[0] :
+        for i in gui.信息表[0] :
             temp =self.__创建label(i,150)
-            self.grid_信息表.Add(temp, pos = (var.信息表[0].index(i),0), flag=wx.EXPAND )
+            self.grid_信息表.Add(temp, pos = (gui.信息表[0].index(i),0), flag=wx.EXPAND )
 
     def 添加信息表(self, grid, panel):
         # 添加表格
-        for i in var.单位列表:
+        for i in gui.单位列表:
             self.表.append([])
             temp= None
             temp = i.get信息()
             for j in range(len(temp)) :
                 _l = self.__创建label(str(temp[j]),100 )
                 self.表[-1].append(_l )
-                _pos=( j, var.单位列表.index(i)+1)
+                _pos=( j, gui.单位列表.index(i)+1)
                 grid.Add(_l, pos = _pos, flag=wx.EXPAND )
 
         #grid.Add(_l, pos = _pos, flag=wx.EXPAND )
     def 刷新(self,e):
         # print('--'*20)
         print('刷新1','--'*20)
-        for i in var.单位列表:
+        for i in gui.单位列表:
             i.refresh()
-        for i in var.单位列表:
+        for i in gui.单位列表:
             temp= None
             temp = i.get信息()
             for j in range(len(temp)) :
-                self.表[var.单位列表.index(i)][j].SetLabel(str(temp[j]))
+                self.表[gui.单位列表.index(i)][j].SetLabel(str(temp[j]))
         self.资金总和()
 
     def 刷新2(self,e):
         #print('--'*20)
         # print('--'*20)
-        for i in var.单位列表:
+        for i in gui.单位列表:
             i.sub结算()
-        for i in var.单位列表:
+        for i in gui.单位列表:
             temp= None
             temp = i.get信息()
             for j in range(len(temp)) :
-                self.表[var.单位列表.index(i)][j].SetLabel(str(temp[j]))
+                self.表[gui.单位列表.index(i)][j].SetLabel(str(temp[j]))
         self.资金总和()
         
     def 菜单栏事件(self,event):
@@ -141,7 +141,7 @@ class Mywin(wx.Frame):
 
     def 添加资源栏(self, grid):
         # 添加表格
-        for i in var.单位列表:
+        for i in gui.单位列表:
             grid.Add( i.grid, flag=wx.ALL|wx.EXPAND)
             i.addCtrls(self.panel)
             self.grid0.AddStretchSpacer(1)
@@ -167,15 +167,15 @@ class Mywin(wx.Frame):
             self.t = Timer(2.0, self.display)
             self.t.start()
     def 预算(self):
-        for i in var.单位列表:
+        for i in gui.单位列表:
             i.sub预算()
-            print('buy',var.buy)
-            print('out',var.out)
+            print('buy',gui.buy)
+            print('out',gui.out)
 
     def 资金总和(self):
         rv = 0
         temp = ''
-        for i in var.单位列表:
+        for i in gui.单位列表:
             rv += i. get净资产()
         if rv < 10000 :
             temp = '{:>4d}'.format(rv)

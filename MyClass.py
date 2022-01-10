@@ -6,7 +6,7 @@ import wx
 import random
 import winsound
 
-import var
+import gui
 
 
 
@@ -21,7 +21,7 @@ class factory(object):
         self.panel = ''
         名称 = 'F_' +类型
         self.信息={'资金':0,'类型':类型,'名称':名称, '储量':0,'人工':0}
-        self.pf=var.pf[var.产品列表.index(类型)]
+        self.pf=gui.pf[gui.产品列表.index(类型)]
 
     def __创建label(self,panel,txt='txt',宽度=90,字体=20,颜色='#FFFFFF'):
         temp = wx.StaticText(panel, label=txt,size=(宽度,-1),style=wx.ALIGN_CENTRE)
@@ -33,11 +33,11 @@ class factory(object):
 
     def sub预算(self):
         # 被购买
-        var.buy[self.信息['类型']] = self.get今日购买()
-        print('buy',var.buy)
+        gui.buy[self.信息['类型']] = self.get今日购买()
+        print('buy',gui.buy)
         # 生产
-        var.out[self.信息['类型']] = self.__单人产量 * self.信息['人工']
-        var.price[self.信息['类型']] = self.get今日价格()
+        gui.out[self.信息['类型']] = self.__单人产量 * self.信息['人工']
+        gui.price[self.信息['类型']] = self.get今日价格()
 
     def sub结算(self):
         t = self.信息['类型']
@@ -46,10 +46,10 @@ class factory(object):
         #    self.信息['资金'] -= var.buy[i] * var.price[i]
         #    var.单位列表[var.产品列表.index(i)].信息['资金'] += var.buy[i] * var.price[i]
         self.信息['资金'] += self.get购买花费()
-        self.信息['储量'] -= var.buy[t]
+        self.信息['储量'] -= gui.buy[t]
         # 生产
-        self.信息['储量'] += var.out[self.信息['类型']]
-        self.信息['资金'] += var.buy[t]* var.price[t]
+        self.信息['储量'] += gui.out[self.信息['类型']]
+        self.信息['资金'] += gui.buy[t]* gui.price[t]
 
     def addCtrls(self,panel):
         # row 1
@@ -105,12 +105,12 @@ class factory(object):
 
     def get净利润(self):
         i = self.信息['类型']
-        return (var.out[i] +var.buy[i])* var.price[i] + self.get购买花费()
+        return (gui.out[i] +gui.buy[i])* gui.price[i] + self.get购买花费()
 
     def get今日购买(self):
         rv = 0
-        _id = var.产品列表.index(self.信息['类型'])
-        for i in var.单位列表:
+        _id = gui.产品列表.index(self.信息['类型'])
+        for i in gui.单位列表:
             # 计算每个单位需要的t 的量,然后累加
             try:
                 rv += i.pf[self.信息['类型']] * i.信息['人工']
@@ -126,20 +126,20 @@ class factory(object):
         return rv
 
     def get净资产(self):
-        return self.信息['资金'] + self.信息['储量']* var.price[self.信息['类型']]
+        return self.信息['资金'] + self.信息['储量']* gui.price[self.信息['类型']]
 
     def get信息(self):
         #,'今日价格','购买花费'
         rv = []
         i = self.信息['类型']
-        self.信息.update({    '产量':var.out[i]       })
-        self.信息.update({'出售':var.buy[self.信息['类型']]})
+        self.信息.update({    '产量':gui.out[i]       })
+        self.信息.update({'出售':gui.buy[self.信息['类型']]})
         self.信息.update({'今日价格':self.get今日价格()})
         self.信息.update({'购买花费':self.get购买花费() })
-        self.信息.update({'今日产值':var.out[i] * var.price[i]})
+        self.信息.update({'今日产值':gui.out[i] * gui.price[i]})
         self.信息.update({  '净利润':self.get净利润()  })
         self.信息.update({  '净资产': self. get净资产()})
-        for i in var.信息表[0]:
+        for i in gui.信息表[0]:
             rv.append(self.信息[i])
         return rv
 
